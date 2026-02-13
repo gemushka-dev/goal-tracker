@@ -2,9 +2,11 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const database = require("./database/databaseInit");
-
 const app = express();
+
+const database = require("./database/databaseInit");
+const errorValidation = require("./error/errorMiddleware");
+const usersRouter = require("./users/usersRouter");
 
 const PORT = 3500;
 
@@ -13,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http:127.0.0.1:5500",
+    origin: "http://127.0.0.1:5500",
     credentials: true,
   }),
 );
@@ -21,6 +23,8 @@ app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`);
   next();
 });
+app.use("/users", usersRouter);
+app.use(errorValidation);
 
 async function start() {
   try {

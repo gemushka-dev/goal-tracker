@@ -25,6 +25,8 @@ Node.js,PostgreSQL
 - jsonwebtoken
 - cors
 - dotenv
+- bcrypt
+- zod
 
 ### Setup
 

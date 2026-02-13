@@ -82,11 +82,11 @@ class Database {
     return result.rows[0];
   }
 
-  async createUser({ username, user_email, password, userImg }) {
+  async createUser({ username, userEmail, password, userImg }) {
     const query = `INSERT INTO users(username , user_email , password, user_img) VALUES($1,$2,$3, $4) RETURNING user_id , username, user_email , user_img , created_at`;
     const result = await pool.query(query, [
       username,
-      user_email,
+      userEmail,
       password,
       userImg,
     ]);
