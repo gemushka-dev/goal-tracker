@@ -134,7 +134,7 @@ class Database {
   }
 
   async getAllGoals() {
-    const query = "SELECT * FROM goals";
+    const query = "SELECT * FROM goals WHERE status = 'public' ";
     const result = await pool.query(query);
     return result.rows;
   }

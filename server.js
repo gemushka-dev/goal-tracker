@@ -7,6 +7,7 @@ const app = express();
 const database = require("./database/databaseInit");
 const errorValidation = require("./error/errorMiddleware");
 const usersRouter = require("./users/usersRouter");
+const goalsRouter = require("./goals/goalsRouter");
 
 const PORT = 3500;
 
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use("/users", usersRouter);
+app.use("/goals", goalsRouter);
 app.use(errorValidation);
 
 async function start() {
