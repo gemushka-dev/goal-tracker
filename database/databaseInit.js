@@ -186,6 +186,12 @@ class Database {
     return result.rows;
   }
 
+  async getCommentById(commentId) {
+    const query = `SELECT goal_id FROM comments WHERE comment_id = $1`;
+    const result = await pool.query(query, [commentId]);
+    return result.rows[0];
+  }
+
   async createCommentToGoal({ commentText, userId, goalId }) {
     const query = `INSERT INTO comments(comment_text,user_id,goal_id) VALUES($1,$2,$3) RETURNING *`;
     const result = await pool.query(query, [commentText, userId, goalId]);

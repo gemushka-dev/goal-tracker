@@ -19,6 +19,8 @@ module.exports = (err, req, res, next) => {
       return res.status(409).json({ error: 409, message: err.message });
     case "Not Found":
       return res.status(404).json({ error: 404, message: err.message });
+    case "Forbidden":
+      return res.status(403).json({ error: 403, message: err.message });
   }
 
   res.status(500).json({ error: 500, message: "Internal Server Error" });

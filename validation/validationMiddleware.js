@@ -34,6 +34,12 @@ const creatGoalSchema = z.object({
   status: z.enum(["public", "private"]).default("private"),
 });
 
+const createCommentSchema = z.object({
+  commentText: z
+    .string({ message: "Incorrect text type" })
+    .min(1, { message: "Text must be at least 1 character long" }),
+});
+
 module.exports.registerValidation = (req, res, next) => {
   try {
     const validatedData = registerSchema.parse(req.body);
@@ -67,6 +73,16 @@ module.exports.updateValidation = (req, res, next) => {
 module.exports.createGoalValidation = (req, res, next) => {
   try {
     const validatedData = creatGoalSchema.parse(req.body);
+    req.body = validatedData;
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports.createCommentValidation = (req, res, next) => {
+  try {
+    const validatedData = createCommentSchema.parse(req.body);
     req.body = validatedData;
     next();
   } catch (e) {
