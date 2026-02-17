@@ -60,9 +60,16 @@ class Database {
                 (goal_id IS NOT NULL AND comment_id IS NULL)
                 OR
                 (goal_id IS NULL AND comment_id IS NOT NULL)
-                ),
-                CONSTRAINT uniq_like UNIQUE (user_id , goal_id , comment_id)
-            )
+                )
+            );
+
+            CREATE UNIQUE INDEX uniq_goal_like
+            ON likes(user_id, goal_id)
+            WHERE goal_id IS NOT NULL;
+
+            CREATE UNIQUE INDEX uniq_comment_like
+            ON likes(user_id, comment_id)
+            WHERE comment_id IS NOT NULL;
     `;
 
     await pool.query(usersQuery);

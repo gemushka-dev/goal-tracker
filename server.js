@@ -9,6 +9,7 @@ const errorValidation = require("./error/errorMiddleware");
 const usersRouter = require("./users/usersRouter");
 const goalsRouter = require("./goals/goalsRouter");
 const commentsRouter = require("./comments/commentsRouter");
+const likesRouter = require("./likes/likesRouter");
 
 const PORT = 3500;
 
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 app.use("/users", usersRouter);
 app.use("/goals", goalsRouter);
 app.use("/comments", commentsRouter);
+app.use("/likes", likesRouter);
 app.use(errorValidation);
 
 async function start() {
