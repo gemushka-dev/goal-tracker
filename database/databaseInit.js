@@ -1,4 +1,5 @@
 const { pool } = require("./databasePool");
+const HttpError = require("../error/errorClass");
 
 const allowedField = ["username", "user_img"];
 
@@ -108,14 +109,14 @@ class Database {
     let index = 1;
     for (const key of fields) {
       if (!allowedField.includes(key)) {
-        throw new Error("Invalid Field");
+        throw new HttpError("Invalid Field", 400);
       }
 
       setFields.push(`${key} = $${index}`);
       index++;
     }
     if (setFields.length === 0) {
-      throw new Error("No fields to update");
+      throw new HttpError("No fields to update", 400);
     }
 
     values.push(userId);

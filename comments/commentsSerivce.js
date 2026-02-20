@@ -1,4 +1,5 @@
 const commentsRepository = require("./commentsRepository");
+const HttpError = require("../error/errorClass");
 
 module.exports.getCommentsByGoalId = async (goalId) =>
   commentsRepository.getCommentsByGoalId(goalId);
@@ -28,7 +29,7 @@ module.exports.createCommentToGoal = async ({ commentText, userId, goalId }) =>
 module.exports.deleteComment = async (commentId, userId) => {
   const result = await commentsRepository.deleteComment(commentId, userId);
   if (!result) {
-    throw new Error("Forbidden");
+    throw new HttpError("Forbidden", 403);
   }
   return result;
 };
