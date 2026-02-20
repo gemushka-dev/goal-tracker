@@ -63,11 +63,11 @@ class Database {
                 )
             );
 
-            CREATE UNIQUE INDEX uniq_goal_like
+            CREATE UNIQUE INDEX IF NOT EXISTS uniq_goal_like
             ON likes(user_id, goal_id)
             WHERE goal_id IS NOT NULL;
 
-            CREATE UNIQUE INDEX uniq_comment_like
+            CREATE UNIQUE INDEX IF NOT EXISTS uniq_comment_like
             ON likes(user_id, comment_id)
             WHERE comment_id IS NOT NULL;
     `;
