@@ -22,7 +22,8 @@ const updateSchema = z.object({
   username: z
     .string({ message: "Incorrect username type" })
     .min(3, { message: "Username must be at least 3 characters long" })
-    .max(64, { message: "Username must be at max 64 characters long" }),
+    .max(64, { message: "Username must be at max 64 characters long" })
+    .optional(),
 });
 
 const creatGoalSchema = z.object({
