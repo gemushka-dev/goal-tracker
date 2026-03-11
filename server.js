@@ -10,15 +10,17 @@ const usersRouter = require("./users/usersRouter");
 const goalsRouter = require("./goals/goalsRouter");
 const commentsRouter = require("./comments/commentsRouter");
 const likesRouter = require("./likes/likesRouter");
+const identityMiddleware = require("./auth/identityMiddleware");
 
 const PORT = 3500;
 
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://127.0.0.1:5500",
+    origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
     credentials: true,
   }),
 );
@@ -26,6 +28,7 @@ app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`);
   next();
 });
+app.get("/me", identityMiddleware);
 app.use("/users", usersRouter);
 app.use("/goals", goalsRouter);
 app.use("/comments", commentsRouter);
