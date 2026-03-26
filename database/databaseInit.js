@@ -73,10 +73,17 @@ class Database {
             WHERE comment_id IS NOT NULL;
     `;
 
+    const indexesQuery = `CREATE INDEX IF NOT EXISTS idx_comments_goal_id ON comments(goal_id);
+                          CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);
+                          CREATE INDEX IF NOT EXISTS idx_goals_user_id ON goals(user_id);
+                          CREATE INDEX IF NOT EXISTS idx_likes_goal_id ON likes(goal_id);
+                          CREATE INDEX IF NOT EXISTS idx_likes_comment_id ON likes(comment_id);`;
+
     await pool.query(usersQuery);
     await pool.query(goalsQuery);
     await pool.query(commentsQuery);
     await pool.query(likesQuery);
+    await pool.query(indexesQuery);
   }
 
   async getAllUsers() {
@@ -142,13 +149,21 @@ class Database {
   }
 
   async getAllGoals() {
-    const query = "SELECT * FROM goals WHERE status = 'public' ";
+    const query = `SELECT g.goal_id, g.goal_title, g.goal_content, g.status, g.created_at ,
+    u.user_id , u.username 
+    FROM goals g 
+    INNER JOIN users u USING(user_id)
+    WHERE status = 'public' `;
     const result = await pool.query(query);
     return result.rows;
   }
 
   async getGoalsByUserId(userId) {
-    const query = `SELECT * FROM goals WHERE user_id = $1 AND status = 'public' ORDER BY created_at DESC`;
+    const query = `SELECT g.goal_id, g.goal_title, g.goal_content, g.status, g.created_at ,
+    u.user_id , u.username 
+    FROM goals g 
+    INNER JOIN users u USING(user_id) 
+    WHERE user_id = $1 AND status = 'public' ORDER BY created_at DESC`;
     const result = await pool.query(query, [userId]);
     return result.rows;
   }
@@ -160,7 +175,11 @@ class Database {
   }
 
   async getGoalById(goalId) {
-    const query = `SELECT * FROM goals WHERE goal_id = $1 AND status = 'public'`;
+    const query = `SELECT g.goal_id, g.goal_title, g.goal_content, g.status, g.created_at ,
+    u.user_id , u.username 
+    FROM goals g 
+    INNER JOIN users u USING(user_id)
+    WHERE goal_id = $1 AND status = 'public'`;
     const result = await pool.query(query, [goalId]);
     return result.rows[0];
   }
@@ -183,13 +202,21 @@ class Database {
   }
 
   async getCommentsByGoalId(goalId) {
-    const query = `SELECT * FROM comments WHERE goal_id = $1 ORDER BY created_at DESC`;
+    const query = `SELECT c.comment_id, c.comment_text, c.parent_id, c.created_at, 
+    u.user_id, u.username 
+    FROM comments c 
+    INNER JOIN users u USING(user_id) 
+    WHERE goal_id = $1 ORDER BY created_at DESC`;
     const result = await pool.query(query, [goalId]);
     return result.rows;
   }
 
   async getCommentsByCommentId(parentId) {
-    const query = `SELECT * FROM comments WHERE parent_id = $1 ORDER BY created_at ASC`;
+    const query = `SELECT c.comment_id, c.comment_text, c.parent_id, c.created_at, 
+    u.user_id, u.username 
+    FROM comments c 
+    INNER JOIN users u USING(user_id) 
+    WHERE parent_id = $1 ORDER BY created_at ASC`;
     const result = await pool.query(query, [parentId]);
     return result.rows;
   }
